@@ -1,0 +1,9 @@
+Summary for sudokuj.jar
+Decompiled with CFR 0.152
+
+
+jguic.util.UndoManager
+----------------------------
+
+push(jguic.util.UndoableCommand )
+  Unable to fully structure code

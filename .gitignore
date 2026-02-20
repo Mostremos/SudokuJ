@@ -1,0 +1,49 @@
+# Archivos compilados
+target/
+*.class
+*.jar
+!original/binaries/*.jar
+
+# Archivos de configuración del IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos temporales
+*.log
+*.tmp
+*.swp
+*~
+nul
+
+# Archivos de compilación
+compile_errors.txt
+launch4j_config.xml
+
+# Release (se generará al compilar)
+release/*.jar
+release/*.exe
+!release/README.md
+!release/LICENCE.txt
+
+# Directorios de release para ZIP
+SudokuJ 2.0.0 Java/
+SudokuJ 2.0.0 Windows/
+dist/
+
+# Archivos de descompilación temporal
+src-decompiled/
+cfr.jar
+
+# Archivos de configuración local
+options.ser
+
+# Directorio de trabajo temporal
+work/

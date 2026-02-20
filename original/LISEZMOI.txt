@@ -1,0 +1,47 @@
+SudokuJ 1.0.1
+===============================================================================
+
+Installation
+------------
+
+* Pré-requis
+
+SudokuJ nécessite l'installation du SDK Java 5.0.
+Vous pouvez le télécharger à l'adresse suivante :
+	http://java.sun.com/javase/downloads/index.jsp
+
+* Installation
+
+Après le téléchargement, décompressez l'archive SudokuJ où vous le souhaitez.
+
+
+Lancement de l'application
+--------------------------
+
+  - Si vous êtes sous Windows, un double-clic sur sudokuj.jar devrait suffire
+    à lancer SudokuJ. Si ce n'est pas le cas, exécutez la commande suivante :
+    	java -jar sudokuj.jar
+	
+  - Si vous êtes sous architecture UNIX (Linux, Mac OS), veillez tout d'abord
+    à renseigner la variable LD_LIBRARY_PATH. Pour ce faire, une fois dans
+    le répertoire principal de SudokuJ, exécutez la commande suivante :
+    	export LD_LIBRARY_PATH=.
+
+    Ensuite, vous pourrez lancer SudokuJ à l'aide de la commande suivante :
+    	java -jar sudokuj.jar
+
+
+Mise à jour
+-----------
+
+Reportez-vous à la page principale de SudokuJ sur Google Code pour vous tenir
+informé d'éventuelles mises à jour :
+	http://code.google.com/p/sudokuj07/
+
+
+Licence
+-------
+
+SudokuJ est un logiciel libre soumis à la license GPL (GNU General Public
+License). Consultez le fichier LICENCE.txt pour obtenir davantage d'informations
+sur cette licence.
