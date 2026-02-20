@@ -1,8 +1,10 @@
-# SudokuJ v2.0.0 - Actualización y Modernización
+# SudokuJ v2.1.0 - Actualización y Modernización
 
 ![Java](https://img.shields.io/badge/Java-11%2B-orange)
 ![License](https://img.shields.io/badge/License-GPL%20v2-blue)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
+
+> ⚠️ **Versión provisoria** — En proceso de mejora. Se están corrigiendo errores de lógica y añadiendo funciones. Puede haber cambios frecuentes.
 
 ## 🎮 Descripción
 
@@ -48,7 +50,7 @@ mvn clean package
 
 ### Ejecución
 ```bash
-java -jar target/sudokuj-2.0.0.jar
+java -jar target/sudokuj-2.1.0.jar
 ```
 
 ## 📚 Documentación Completa
@@ -205,7 +207,7 @@ Ver [LICENCE.txt](LICENCE.txt) para más detalles.
   - Sitio: https://code.google.com/archive/p/sudokuj07/
   - Licencia: GPL v2
   
-- **Actualización v2.0.0** (19-02-2026)
+- **Actualización v2.1.0** (20-02-2026)
   - Por: https://github.com/Mostremos/SudokuJ
   - Recuperación, reversionado y mejoras para Java moderno
   - Eliminación de dependencias nativas, corrección de bugs, i18n

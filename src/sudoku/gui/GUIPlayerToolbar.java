@@ -15,6 +15,7 @@ import jguic.util.DesactivateUndo;
 import jguic.util.Redo;
 import jguic.util.Undo;
 import jguic.util.UndoableCommand;
+import sudoku.commands.HintCommand;
 import sudoku.commands.CheckSolutionCommand;
 import sudoku.commands.LoadCommand;
 import sudoku.commands.NewGridCommand;
@@ -76,6 +77,14 @@ extends GUIToolbar {
         });
         this.swing_toolbar.add(resetGrid);
         this.swing_toolbar.addSeparator();
+        JButton hintBtn = new JButton(new ImageIcon("images/help.png"));
+        hintBtn.setToolTipText(I18n.get("menu.hint"));
+        hintBtn.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                GUIPlayerToolbar.this.handle(new HintCommand());
+            }
+        });
+        this.swing_toolbar.add(hintBtn);
         JButton showGrid = new JButton(new ImageIcon("images/grid_full.png"));
         showGrid.setToolTipText("Afficher la solution");
         showGrid.addActionListener(new ActionListener(){

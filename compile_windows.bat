@@ -5,14 +5,14 @@ REM Compila SudokuJ sin necesidad de Maven
 setlocal enabledelayedexpansion
 
 echo ========================================
-echo    Compilando SudokuJ v2.0.0
+echo    Compilando SudokuJ v2.1.0
 echo ========================================
 echo.
 
 REM Configuración
 set SRC=src
 set OUT=target\classes
-set JAR=target\sudokuj-2.0.0.jar
+set JAR=target\sudokuj-2.1.0.jar
 set MAIN_CLASS=sudoku.Main
 set ERRORS=compile_errors.txt
 

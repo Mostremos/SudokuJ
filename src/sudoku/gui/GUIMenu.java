@@ -35,6 +35,7 @@ import jguic.util.Undo;
 import jguic.util.UndoableCommand;
 import sudoku.commands.CheckSolutionCommand;
 import sudoku.commands.ExitCommand;
+import sudoku.commands.HintCommand;
 import sudoku.commands.FindSolutionCommand;
 import sudoku.commands.LoadCommand;
 import sudoku.commands.NewGridCommand;
@@ -63,6 +64,7 @@ extends MediatorExtension {
     private JMenuItem swing_playpause;
     private JMenuItem swing_undo;
     private JMenuItem swing_redo;
+    private JMenuItem swing_hint;
     private JMenuItem swing_checkSolution;
     private JMenuItem swing_showSolutionP;
     private JMenuItem swing_findSolution;
@@ -200,6 +202,15 @@ extends MediatorExtension {
 
     private void constructActionsMenu() {
         JMenu actions = new JMenu(I18n.get("menu.actions"));
+        this.swing_hint = new JMenuItem(I18n.get("menu.hint"));
+        this.swing_hint.setAccelerator(KeyStroke.getKeyStroke(72, 256)); // Ctrl+H
+        this.swing_hint.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                GUIMenu.this.handle(new HintCommand());
+            }
+        });
+        actions.add(this.swing_hint);
+        actions.add(new JToolBar.Separator());
         this.swing_showSolutionP = new JMenuItem(I18n.get("menu.show_solution"));
         this.swing_showSolutionP.setAccelerator(KeyStroke.getKeyStroke(116, 0));
         this.swing_showSolutionP.addActionListener(new ActionListener(){
@@ -380,6 +391,7 @@ extends MediatorExtension {
             if (c.getUserData().getMode() == 0) {
                 this.swing_saveGame.setEnabled(true);
                 this.swing_resetGame.setEnabled(true);
+                this.swing_hint.setEnabled(true);
                 this.swing_checkSolution.setEnabled(true);
                 this.swing_showSolutionP.setEnabled(true);
                 this.swing_playpause.setEnabled(true);
@@ -391,6 +403,7 @@ extends MediatorExtension {
             } else {
                 this.swing_saveGame.setEnabled(false);
                 this.swing_resetGame.setEnabled(false);
+                this.swing_hint.setEnabled(false);
                 this.swing_checkSolution.setEnabled(false);
                 this.swing_showSolutionP.setEnabled(false);
                 this.swing_playpause.setEnabled(false);

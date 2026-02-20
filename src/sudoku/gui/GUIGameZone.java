@@ -244,8 +244,14 @@ extends MediatorExtension {
             }
         } else if (command instanceof SetValueCommand) {
             c = (SetValueCommand)command;
-            Cell cell = this.userdata.getGrid().getCell(((SetValueCommand)c).getCellX() - 1, ((SetValueCommand)c).getCellY() - 1);
-            cell.setValue(((SetValueCommand)c).getNewValue());
+            int cx = ((SetValueCommand)c).getCellX() - 1;
+            int cy = ((SetValueCommand)c).getCellY() - 1;
+            int newVal = ((SetValueCommand)c).getNewValue();
+            Cell cell = this.userdata.getGrid().getCell(cx, cy);
+            cell.setValue(newVal);
+            if (newVal > 0) {
+                this.userdata.getGrid().clearPossibilityInPeers(cx, cy, newVal);
+            }
         } else if (command instanceof SetPossibilityCommand) {
             c = (SetPossibilityCommand)command;
             int x = ((SetPossibilityCommand)c).getCellX() - 1;

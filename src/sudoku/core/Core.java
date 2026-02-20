@@ -22,6 +22,7 @@ public class Core {
 
     /**
      * Genera un sudoku completo y luego elimina celdas según la dificultad.
+     * Solo se eliminan celdas que mantienen la unicidad de la solución.
      * @param difficulty Nivel de dificultad (0=EASY, 1=MEDIUM, 2=HARD)
      * @return Array de 81 elementos con el sudoku (0 = celda vacía)
      */
@@ -33,22 +34,68 @@ public class Core {
         // Generar un sudoku completo válido
         short[] completeGrid = generateCompleteSudoku();
         
-        // Crear una lista de todas las posiciones
+        // Crear lista de posiciones y mezclar
         List<Integer> positions = new ArrayList<>();
         for (int i = 0; i < 81; i++) {
             positions.add(i);
         }
-        
-        // Mezclar aleatoriamente
         Collections.shuffle(positions, random);
         
-        // Eliminar celdas según la dificultad
+        // Eliminar celdas solo si la solución sigue siendo única
         int cellsToRemove = DIFFICULTY_CELLS[difficulty];
-        for (int i = 0; i < cellsToRemove && i < positions.size(); i++) {
-            completeGrid[positions.get(i)] = 0;
+        int removed = 0;
+        int attempts = 0;
+        int maxAttempts = 81 * 3; // Evitar bucle infinito
+        
+        while (removed < cellsToRemove && attempts < maxAttempts) {
+            for (int idx : positions) {
+                if (removed >= cellsToRemove) break;
+                if (completeGrid[idx] == 0) continue;
+                
+                short saved = completeGrid[idx];
+                completeGrid[idx] = 0;
+                
+                if (countSolutions(copyGrid(completeGrid)) == 1) {
+                    removed++;
+                } else {
+                    completeGrid[idx] = saved; // Restaurar
+                }
+            }
+            Collections.shuffle(positions, random);
+            attempts++;
         }
         
         return completeGrid;
+    }
+    
+    private static short[] copyGrid(short[] grid) {
+        short[] copy = new short[81];
+        System.arraycopy(grid, 0, copy, 0, 81);
+        return copy;
+    }
+    
+    /**
+     * Cuenta soluciones hasta un límite (2 basta para detectar múltiples).
+     */
+    private static int countSolutions(short[] grid) {
+        return countSolutionsRec(copyGrid(grid), 2);
+    }
+    
+    private static int countSolutionsRec(short[] grid, int limit) {
+        for (int i = 0; i < 81; i++) {
+            if (grid[i] == 0) {
+                int total = 0;
+                for (short n = 1; n <= 9 && total < limit; n++) {
+                    if (isValid(grid, i, n)) {
+                        grid[i] = n;
+                        total += countSolutionsRec(grid, limit - total);
+                        grid[i] = 0;
+                    }
+                }
+                return total;
+            }
+        }
+        return 1; // Celda completa = una solución
     }
 
     /**

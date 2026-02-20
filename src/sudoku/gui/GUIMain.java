@@ -25,6 +25,7 @@ import jguic.util.MainMediator;
 import jguic.util.UndoableCommand;
 import sudoku.commands.CheckSolutionCommand;
 import sudoku.commands.ExitCommand;
+import sudoku.commands.HintCommand;
 import sudoku.commands.FindSolutionCommand;
 import sudoku.commands.LoadCommand;
 import sudoku.commands.NewGridCommand;
@@ -174,25 +175,31 @@ extends MainMediator {
             c8.setGrid(this.userdata.getGrid());
         } else if (command instanceof ShowSolutionCommand) {
             ShowSolutionCommand c9 = (ShowSolutionCommand)command;
-            boolean valid = true;
-            int i = 0;
-            while (valid && i < 9) {
-                int j = 0;
-                while (valid && j < 9) {
-                    if (this.userdata.getGrid().getSolution(i, j) == 0) {
-                        valid = false;
-                    }
-                    ++j;
-                }
-                ++i;
+            boolean valid;
+            if (this.userdata.getGrid().solve()) {
+                valid = true;
+            } else {
+                valid = false;
             }
             c9.setHasSolution(valid);
         } else if (command instanceof FindSolutionCommand) {
             FindSolutionCommand c10 = (FindSolutionCommand)command;
             c10.setSolution(this.userdata.getGrid().solve());
+        } else if (command instanceof HintCommand) {
+            HintCommand cHint = (HintCommand)command;
+            int[] hint = this.userdata.getGrid().getHint();
+            cHint.setHint(hint);
+            if (hint != null) {
+                SetValueCommand svc = new SetValueCommand(hint[0] + 1, hint[1] + 1);
+                svc.setOldValue(0);
+                svc.setNewValue(hint[2]);
+                this.handle(svc);
+            }
         } else if (command instanceof ValidateGridCommand) {
             ValidateGridCommand c11 = (ValidateGridCommand)command;
-            c11.setValid(this.userdata.getGrid().validate());
+            boolean hasNoDuplicates = this.userdata.getGrid().validate();
+            boolean hasSolution = hasNoDuplicates && this.userdata.getGrid().solve();
+            c11.setValid(hasNoDuplicates && hasSolution);
         } else if (command instanceof SetBackgroundImageCommand) {
             SetBackgroundImageCommand c12 = (SetBackgroundImageCommand)command;
             if (c12.getImageName().length() == 0) {

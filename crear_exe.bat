@@ -7,7 +7,7 @@ echo    Creando Ejecutable .exe
 echo ========================================
 echo.
 
-set JAR=target\sudokuj-2.0.0.jar
+set JAR=target\sudokuj-2.1.0.jar
 set EXE_NAME=SudokuJ
 set DEST=dist
 
@@ -45,11 +45,11 @@ if %ERRORLEVEL% EQU 0 (
     
     jpackage --input target ^
       --name %EXE_NAME% ^
-      --main-jar sudokuj-2.0.0.jar ^
+      --main-jar sudokuj-2.1.0.jar ^
       --main-class sudoku.Main ^
       --type exe ^
       --dest %DEST% ^
-      --app-version 2.0.0 ^
+      --app-version 2.1.0 ^
       --vendor "SudokuJ Team" ^
       --description "SudokuJ - Juego de Sudoku" ^
       --win-dir-chooser ^
@@ -73,11 +73,11 @@ if %ERRORLEVEL% EQU 0 (
         REM app-image: carpeta con .exe y Java incluido, sin instalador
         jpackage --input target ^
           --name %EXE_NAME% ^
-          --main-jar sudokuj-2.0.0.jar ^
+          --main-jar sudokuj-2.1.0.jar ^
           --main-class sudoku.Main ^
           --type app-image ^
           --dest %DEST% ^
-          --app-version 2.0.0 ^
+          --app-version 2.1.0 ^
           --vendor "SudokuJ Team"
         
         if exist "%DEST%\%EXE_NAME%\%EXE_NAME%.exe" (
@@ -151,12 +151,12 @@ if defined LAUNCH4J (
         echo     ^<maxHeapSize^>512^</maxHeapSize^>
         echo   ^</jre^>
         echo   ^<versionInfo^>
-        echo     ^<fileVersion^>2.0.0.0^</fileVersion^>
-        echo     ^<txtFileVersion^>2.0.0^</txtFileVersion^>
+        echo     ^<fileVersion^>2.1.0.0^</fileVersion^>
+        echo     ^<txtFileVersion^>2.1.0^</txtFileVersion^>
         echo     ^<fileDescription^>SudokuJ - Juego de Sudoku^</fileDescription^>
         echo     ^<copyright^>GPL v2^</copyright^>
-        echo     ^<productVersion^>2.0.0.0^</productVersion^>
-        echo     ^<txtProductVersion^>2.0.0^</txtProductVersion^>
+        echo     ^<productVersion^>2.1.0.0^</productVersion^>
+        echo     ^<txtProductVersion^>2.1.0^</txtProductVersion^>
         echo     ^<productName^>SudokuJ^</productName^>
         echo     ^<companyName^>SudokuJ Team^</companyName^>
         echo     ^<internalName^>SudokuJ^</internalName^>
@@ -197,7 +197,7 @@ if not exist "%DEST%" mkdir "%DEST%"
     echo @echo off
     echo REM Launcher para SudokuJ
     echo cd /d "%%~dp0.."
-    echo start "" java -jar "target\sudokuj-2.0.0.jar"
+    echo start "" java -jar "target\sudokuj-2.1.0.jar"
 ) > "%DEST%\%EXE_NAME%.bat"
 
 echo [OK] Script batch creado: %DEST%\%EXE_NAME%.bat

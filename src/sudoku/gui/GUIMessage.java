@@ -21,6 +21,7 @@ import javax.swing.border.LineBorder;
 import jguic.Command;
 import jguic.Mediator;
 import jguic.MediatorExtension;
+import sudoku.commands.HintCommand;
 import sudoku.commands.CheckSolutionCommand;
 import sudoku.commands.FindSolutionCommand;
 import sudoku.commands.LoadCommand;
@@ -31,6 +32,7 @@ import sudoku.commands.SaveCommand;
 import sudoku.commands.SetUserDataCommand;
 import sudoku.commands.ShowSolutionCommand;
 import sudoku.commands.ValidateGridCommand;
+import sudoku.util.I18n;
 
 public class GUIMessage
 extends MediatorExtension {
@@ -167,6 +169,13 @@ extends MediatorExtension {
             } else {
                 this.pause = false;
                 this.stop();
+            }
+        } else if (command instanceof HintCommand) {
+            HintCommand c = (HintCommand)command;
+            if (c.hasHint()) {
+                this.start(I18n.get("msg.hint_ok"), swing_var_successImage);
+            } else {
+                this.start(I18n.get("msg.hint_no"), swing_var_errorImage);
             }
         } else if (command instanceof CheckSolutionCommand) {
             CheckSolutionCommand c = (CheckSolutionCommand)command;

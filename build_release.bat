@@ -1,15 +1,15 @@
 @echo off
 REM Script para crear directorios de release listos para ZIP y repo
-REM Genera: "SudokuJ 2.0.0 Java" (JAR) y "SudokuJ 2.0.0 Windows" (EXE)
+REM Genera: "SudokuJ 2.1.0 Java" (JAR) y "SudokuJ 2.1.0 Windows" (EXE)
 REM
 REM ANTES de ejecutar: compila con compile_windows.bat y crear_exe.bat
 
 setlocal enabledelayedexpansion
 
-set VERSION=2.0.0
-set DIR_JAR=SudokuJ 2.0.0 Java
-set DIR_EXE=SudokuJ 2.0.0 Windows
-set JAR_SOURCE=target\sudokuj-2.0.0.jar
+set VERSION=2.1.0
+set DIR_JAR=SudokuJ 2.1.0 Java
+set DIR_EXE=SudokuJ 2.1.0 Windows
+set JAR_SOURCE=target\sudokuj-2.1.0.jar
 set EXE_SOURCE=dist\SudokuJ.exe
 
 echo ========================================
@@ -26,17 +26,17 @@ if not exist "%JAR_SOURCE%" (
     exit /b 1
 )
 
-REM === PASO 2: Crear directorio "SudokuJ 2.0.0 Java" para ZIP ===
+REM === PASO 2: Crear directorio "SudokuJ 2.1.0 Java" para ZIP ===
 echo [1/2] Creando directorio "%DIR_JAR%"...
 if exist "%DIR_JAR%" rmdir /s /q "%DIR_JAR%"
 mkdir "%DIR_JAR%"
 
-copy "%JAR_SOURCE%" "%DIR_JAR%\sudokuj-2.0.0.jar" >nul
+copy "%JAR_SOURCE%" "%DIR_JAR%\sudokuj-2.1.0.jar" >nul
 copy "release\LICENCE.txt" "%DIR_JAR%\LICENCE.txt" >nul
 copy "release\README.md" "%DIR_JAR%\README.md" >nul
 
 echo [OK] Directorio creado: %DIR_JAR%\
-echo      - sudokuj-2.0.0.jar
+echo      - sudokuj-2.1.0.jar
 echo      - LICENCE.txt
 echo      - README.md
 echo.
