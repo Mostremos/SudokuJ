@@ -14,7 +14,7 @@ import jguic.util.UndoableCommand;
 
 public abstract class MainMediator
 extends Mediator {
-    protected UndoManager undoManager = new UndoManager();
+    protected UndoManager undoManager = new UndoManager(100);
 
     protected void handle(Command command) {
         if (command instanceof Undo) {

@@ -25,6 +25,7 @@ import jguic.util.MainMediator;
 import jguic.util.UndoableCommand;
 import sudoku.commands.CheckSolutionCommand;
 import sudoku.commands.ExitCommand;
+import sudoku.commands.HintCellHighlightCommand;
 import sudoku.commands.HintCommand;
 import sudoku.commands.FindSolutionCommand;
 import sudoku.commands.LoadCommand;
@@ -151,6 +152,7 @@ extends MainMediator {
             c7.setOldUserData(this.userdata);
             UserData u_reset = new UserData(this.userdata);
             u_reset.getGrid().reset();
+            u_reset.getClock().reset();
             c7.setNewUserData(u_reset);
         } else if (command instanceof PlayPauseCommand) {
             ((PlayPauseCommand)command).setPause(!this.userdata.isPaused());
@@ -194,6 +196,7 @@ extends MainMediator {
                 svc.setOldValue(0);
                 svc.setNewValue(hint[2]);
                 this.handle(svc);
+                this.handle(new HintCellHighlightCommand(hint[0] + 1, hint[1] + 1));
             }
         } else if (command instanceof ValidateGridCommand) {
             ValidateGridCommand c11 = (ValidateGridCommand)command;
@@ -239,6 +242,9 @@ extends MainMediator {
         } else if (command instanceof ResetCommand) {
             ResetCommand c = (ResetCommand)command;
             if (c.getNewUserData() != c.getOldUserData()) {
+                this.undoManager.clear();
+                this.handle(new jguic.util.DesactivateUndo());
+                this.handle(new jguic.util.DesactivateRedo());
                 SetUserDataCommand cm = new SetUserDataCommand();
                 cm.setOldUserData(c.getOldUserData());
                 cm.setNewUserData(c.getNewUserData());

@@ -2,7 +2,7 @@
 
 ## 📋 Resumen
 
-Este documento resume el trabajo realizado para actualizar SudokuJ desde la versión 1.0.1 (discontinuada) a la versión 2.0.0, compatible con Java moderno y multiplataforma.
+Este documento resume el trabajo realizado para actualizar SudokuJ desde la versión 1.0.1 (discontinuada) a la versión 2.0.0, compatible con Java moderno y multiplataforma. Posteriormente se publicó la **v2.2.0** con mejoras de UX (7 idiomas, undo ampliado, efectos visuales, pistas resaltadas). Ver [CHANGELOG.md](../../CHANGELOG.md) para el historial completo.
 
 ---
 

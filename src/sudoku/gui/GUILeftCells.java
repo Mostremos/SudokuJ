@@ -15,6 +15,8 @@ import jguic.Command;
 import jguic.Mediator;
 import jguic.MediatorExtension;
 import sudoku.commands.ClearPossibilitiesCommand;
+import sudoku.commands.SetLanguageCommand;
+import sudoku.util.I18n;
 import sudoku.commands.SetPossibilityCommand;
 import sudoku.commands.SetUserDataCommand;
 import sudoku.commands.SetValueCommand;
@@ -27,7 +29,13 @@ extends MediatorExtension {
     private JLabel swing_title;
     private JLabel swing_leftNumber;
     private static final int ALPHA = 230;
-    private static Font swing_var_font = new Font("Tahoma", 0, 10);
+
+    /** Fuente que soporta CJK (chino/japonés) - Tahoma no muestra esos caracteres */
+    private static Font getStatusFont(int style, float size) {
+        String lang = I18n.getLanguage();
+        Font base = ("zh".equals(lang) || "ja".equals(lang)) ? new Font(Font.SANS_SERIF, 0, 10) : new Font("Tahoma", 0, 10);
+        return base.deriveFont(style, size);
+    }
     private static Color swing_var_textColor = new Color(255, 255, 255, 230);
 
     public GUILeftCells(Mediator parent) {
@@ -35,12 +43,11 @@ extends MediatorExtension {
         this.swing_leftCells.setBackground(new Color(0, 0, 0, 0));
         this.swing_leftCells.setLayout(new BoxLayout(this.swing_leftCells, 2));
         this.swing_title = new JLabel();
-        this.swing_title.setFont(swing_var_font.deriveFont(1, 13.0f));
+        this.swing_title.setFont(getStatusFont(Font.BOLD, 13.0f));
         this.swing_title.setText(sudoku.util.I18n.get("status.cells_left"));
         this.swing_title.setForeground(swing_var_textColor);
-        this.swing_title.setForeground(swing_var_textColor);
         this.swing_leftNumber = new JLabel();
-        this.swing_leftNumber.setFont(swing_var_font.deriveFont(1, 20.0f));
+        this.swing_leftNumber.setFont(getStatusFont(Font.BOLD, 20.0f));
         this.swing_leftNumber.setForeground(swing_var_textColor);
         this.swing_title.setAlignmentY(1.0f);
         this.swing_leftNumber.setAlignmentY(1.0f);
@@ -76,8 +83,16 @@ extends MediatorExtension {
         }
     }
 
+    public void refreshLanguage() {
+        this.swing_title.setFont(getStatusFont(Font.BOLD, 13.0f));
+        this.swing_title.setText(sudoku.util.I18n.get("status.cells_left"));
+        this.swing_leftNumber.setFont(getStatusFont(Font.BOLD, 20.0f));
+    }
+
     public void receiveCommand(Mediator mediator, Command command) {
-        if (command instanceof SetUserDataCommand) {
+        if (command instanceof SetLanguageCommand) {
+            this.refreshLanguage();
+        } else if (command instanceof SetUserDataCommand) {
             SetUserDataCommand c = (SetUserDataCommand)command;
             Grid grid = c.getUserData().getGrid();
             this.missing = 0;

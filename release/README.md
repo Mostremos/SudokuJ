@@ -1,60 +1,51 @@
-# SudokuJ v2.0.0 - Release
+# SudokuJ v2.2.0 - Release
 
-Este directorio contiene los archivos listos para distribución.
+Archivos listos para distribución.
 
 ## 📦 Contenido
 
-- **sudokuj-2.0.0.jar** - JAR ejecutable (cuando se compile)
-- **SudokuJ.exe** - Ejecutable Windows (cuando se cree)
+- **sudokuj-2.2.0.jar** - JAR ejecutable
 - **LICENCE.txt** - Licencia GPL v2
 - **README.md** - Este archivo
 
 ## 🚀 Instalación y Uso
 
 ### Requisitos
-- **Java 11 o superior** (JRE es suficiente para ejecutar)
+- **Java 11 o superior** (JRE suficiente para ejecutar)
 
 ### Ejecutar desde JAR
 ```bash
-java -jar sudokuj-2.0.0.jar
+java -jar sudokuj-2.2.0.jar
 ```
 
 ### Ejecutar desde .exe (Windows)
 Doble clic en `SudokuJ.exe`
 
-## 📋 Características
+## 📋 Características v2.2.0
 
 - ✅ Multiplataforma (Windows, Linux, macOS)
+- ✅ 7 idiomas: español, inglés, francés, portugués, chino, japonés, ruso
 - ✅ Generación de sudokus (Fácil, Medio, Difícil)
-- ✅ Resolución automática
-- ✅ Validación de tableros
-- ✅ Guardar/Cargar partidas
-- ✅ Interfaz gráfica completa
-
-## 🐛 Problemas Conocidos
-
-Ninguno reportado hasta ahora. Si encuentras algún problema, por favor:
-1. Verifica que tienes Java 11+ instalado
-2. Revisa la documentación en `../docs/compilacion/`
-3. Abre un issue en GitHub
+- ✅ Undo/Redo hasta el inicio de la partida
+- ✅ Auto-borrado de duplicados y notas al colocar número
+- ✅ Efectos visuales al completar fila, columna, cuadro o grilla
+- ✅ Pistas con resaltado persistente (celdas marcadas en amarillo)
+- ✅ Resolución automática, validación, guardar/cargar partidas
+- ✅ Modo creador de grillas
 
 ## 📝 Licencia
 
-Este software está bajo la licencia **GPL v2**. Ver `LICENCE.txt` para más detalles.
+GPL v2. Ver `LICENCE.txt`.
 
 ## 🙏 Créditos
 
-- **Proyecto Original:** SudokuJ v1.0.1 (2007) — Autores: Romain Huet y Nicolas Raynaud
-- **Actualización:** v2.0.0 (19-02-2026) — Por [Mostremos](https://github.com/Mostremos/SudokuJ)
-- **Licencia:** GPL v2
+- **Original:** SudokuJ v1.0.1 (2007) — Romain Huet, Nicolas Raynaud
+- **Actualización v2.2.0:** [Mostremos](https://github.com/Mostremos/SudokuJ)
 
 ## 🔗 Enlaces
 
-- **Repositorio:** [https://github.com/Mostremos/SudokuJ](https://github.com/Mostremos/SudokuJ)
-- **Documentación:** Ver `../docs/`
-- **Código Fuente:** Ver `../src/`
+- **Repositorio:** https://github.com/Mostremos/SudokuJ
 
 ---
 
-**Versión:** 2.0.0  
-**Fecha:** 19-02-2026
+**Versión:** 2.2.0 | **Fecha:** 19-02-2026

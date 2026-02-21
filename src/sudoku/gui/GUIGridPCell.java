@@ -29,10 +29,12 @@ import jguic.Mediator;
 import jguic.MediatorExtension;
 import sudoku.commands.CheckSolutionCommand;
 import sudoku.commands.ClearPossibilitiesCommand;
+import sudoku.commands.HintCellHighlightCommand;
 import sudoku.commands.SetCirclesCommand;
 import sudoku.commands.SetHighlightCommand;
 import sudoku.commands.SetPossibilityCommand;
 import sudoku.commands.SetUserDataCommand;
+import sudoku.commands.CompletionFlashCommand;
 import sudoku.commands.SetValueCommand;
 import sudoku.commands.UnsetHighlightCommand;
 import sudoku.core.Cell;
@@ -44,6 +46,7 @@ extends MediatorExtension {
     private int col;
     private boolean fixed;
     private boolean wrong;
+    private boolean hintHighlighted;
     private Timer animation_timer;
     private int animation_time;
     private Color start_color;
@@ -77,6 +80,7 @@ extends MediatorExtension {
     private static Border swing_var_border = new LineBorder(new Color(191, 184, 172, 255), 1);
     private static Color swing_var_victoryBackgroundColor = new Color(194, 245, 118);
     private static Color swing_var_defeatBackgroundColor = new Color(255, 102, 102);
+    private static Color swing_var_hintBackgroundColor = new Color(255, 235, 156); // Amarillo suave para celdas de pista
 
     public GUIGridPCell(Mediator parent, int row, int col) {
         super(parent);
@@ -236,7 +240,9 @@ extends MediatorExtension {
     }
 
     private void unsetHighlight() {
-        if (this.fixed) {
+        if (this.hintHighlighted) {
+            this.swing_cell.setBackground(swing_var_hintBackgroundColor);
+        } else if (this.fixed) {
             this.swing_cell.setBackground(swing_var_fixedBackgroundColor);
             this.swing_value.setForeground(swing_var_fixedFontColor);
         } else {
@@ -294,6 +300,7 @@ extends MediatorExtension {
         } else if (command instanceof SetUserDataCommand) {
             SetUserDataCommand c5 = (SetUserDataCommand)command;
             this.wrong = false;
+            this.hintHighlighted = false;
             Cell cell = c5.getUserData().getGrid().getCell(this.row - 1, this.col - 1);
             if (cell instanceof PlayedCell) {
                 PlayedCell pcell = (PlayedCell)cell;
@@ -312,6 +319,12 @@ extends MediatorExtension {
                 this.setFixed(true);
                 this.setValue(cell.getValue());
             }
+        } else if (command instanceof HintCellHighlightCommand) {
+            HintCellHighlightCommand hc = (HintCellHighlightCommand) command;
+            if (hc.getRow() == this.row && hc.getCol() == this.col) {
+                this.hintHighlighted = true;
+                this.swing_cell.setBackground(swing_var_hintBackgroundColor);
+            }
         } else if (command instanceof SetHighlightCommand) {
             SetHighlightCommand c6 = (SetHighlightCommand)command;
             this.wrong = false;
@@ -323,6 +336,40 @@ extends MediatorExtension {
             this.wrong = false;
             if (this.swing_value.getText().equals("" + c7.getFigure())) {
                 this.unsetHighlight();
+            }
+        } else if (command instanceof CompletionFlashCommand) {
+            CompletionFlashCommand c9 = (CompletionFlashCommand)command;
+            if (c9.containsCell(this.row, this.col)) {
+                this.wrong = false;
+                this.animation_timer.stop();
+                this.animation_time = 0;
+                this.end_color = swing_var_victoryBackgroundColor;
+                this.animation_timer = new Timer(60, new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                        GUIGridPCell.this.animation_time += 60;
+                        if (GUIGridPCell.this.animation_time <= 300) {
+                            float t = GUIGridPCell.this.animation_time / 300f;
+                            java.awt.Color start = GUIGridPCell.this.fixed ? swing_var_fixedBackgroundColor : swing_var_playableBackgroundColor;
+                            int r = (int)((1-t) * start.getRed() + t * GUIGridPCell.this.end_color.getRed());
+                            int g = (int)((1-t) * start.getGreen() + t * GUIGridPCell.this.end_color.getGreen());
+                            int b = (int)((1-t) * start.getBlue() + t * GUIGridPCell.this.end_color.getBlue());
+                            GUIGridPCell.this.swing_cell.setBackground(new java.awt.Color(Math.min(255,r), Math.min(255,g), Math.min(255,b), 255));
+                        } else if (GUIGridPCell.this.animation_time <= 600) {
+                            float t = (GUIGridPCell.this.animation_time - 300f) / 300f;
+                            java.awt.Color start = GUIGridPCell.this.fixed ? swing_var_fixedBackgroundColor : swing_var_playableBackgroundColor;
+                            int r = (int)(t * start.getRed() + (1-t) * GUIGridPCell.this.end_color.getRed());
+                            int g = (int)(t * start.getGreen() + (1-t) * GUIGridPCell.this.end_color.getGreen());
+                            int b = (int)(t * start.getBlue() + (1-t) * GUIGridPCell.this.end_color.getBlue());
+                            GUIGridPCell.this.swing_cell.setBackground(new java.awt.Color(Math.min(255,r), Math.min(255,g), Math.min(255,b), 255));
+                        } else {
+                            GUIGridPCell.this.animation_timer.stop();
+                            GUIGridPCell.this.unsetHighlight();
+                        }
+                    }
+                });
+                Timer launch = new Timer((this.row - 1) * 50 + (this.col - 1) * 20, e -> GUIGridPCell.this.animation_timer.start());
+                launch.setRepeats(false);
+                launch.start();
             }
         } else if (command instanceof SetCirclesCommand) {
             SetCirclesCommand c8 = (SetCirclesCommand)command;

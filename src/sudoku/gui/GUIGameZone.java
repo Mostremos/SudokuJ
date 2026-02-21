@@ -25,6 +25,8 @@ import jguic.Command;
 import jguic.Mediator;
 import jguic.MediatorExtension;
 import sudoku.commands.CheckSolutionCommand;
+import sudoku.commands.CompletionFlashCommand;
+import sudoku.commands.HintCellHighlightCommand;
 import sudoku.commands.ClearPossibilitiesCommand;
 import sudoku.commands.PlayPauseCommand;
 import sudoku.commands.RepaintCommand;
@@ -50,6 +52,7 @@ public class GUIGameZone
 extends MediatorExtension {
     private UserData userdata;
     private HighlightManager highlight;
+    private final java.util.Set<String> hintCells = new java.util.HashSet<>(); // "row,col" de celdas rellenadas por pista
     private Timer clock;
     private int figure;
     private Color[] highlightColors;
@@ -218,6 +221,7 @@ extends MediatorExtension {
         Command c;
         if (command instanceof SetUserDataCommand) {
             c = (SetUserDataCommand)command;
+            this.hintCells.clear();
             int i = 1;
             while (i < 10) {
                 this.highlight.unlockColor(this.highlightColors[i]);
@@ -250,7 +254,33 @@ extends MediatorExtension {
             Cell cell = this.userdata.getGrid().getCell(cx, cy);
             cell.setValue(newVal);
             if (newVal > 0) {
-                this.userdata.getGrid().clearPossibilityInPeers(cx, cy, newVal);
+                java.util.List<int[]> cleared = this.userdata.getGrid().clearDuplicateValuesInPeers(cx, cy, newVal);
+                for (int[] pos : cleared) {
+                    SetValueCommand clearCmd = new SetValueCommand(pos[0] + 1, pos[1] + 1);
+                    clearCmd.setOldValue(newVal);
+                    clearCmd.setNewValue(0);
+                    this.handle(clearCmd);
+                }
+                // Borrar la posibilidad/nota en celdas alineadas y emitir comandos para la UI
+                for (int j = 0; j < 9; j++) {
+                    if (j != cy) emitClearPossibilityIfPresent(cx, j, newVal);
+                }
+                for (int i = 0; i < 9; i++) {
+                    if (i != cx) emitClearPossibilityIfPresent(i, cy, newVal);
+                }
+                int boxRow = (cx / 3) * 3;
+                int boxCol = (cy / 3) * 3;
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        int rx = boxRow + i;
+                        int ry = boxCol + j;
+                        if (rx != cx || ry != cy) emitClearPossibilityIfPresent(rx, ry, newVal);
+                    }
+                }
+                CompletionFlashCommand flashCmd = checkAndFlashCompletion(cx, cy);
+                if (flashCmd != null) {
+                    this.sendCommand(flashCmd);
+                }
             }
         } else if (command instanceof SetPossibilityCommand) {
             c = (SetPossibilityCommand)command;
@@ -299,6 +329,10 @@ extends MediatorExtension {
             if (((SetBackgroundImageCommand)c).getImageName() != null) {
                 swing_var_backgroundImage = new ImageIcon(((SetBackgroundImageCommand)c).getImageName()).getImage();
             }
+        } else if (command instanceof HintCellHighlightCommand) {
+            HintCellHighlightCommand hc = (HintCellHighlightCommand) command;
+            this.hintCells.add(hc.getRow() + "," + hc.getCol());
+            this.sendCommand(command);
         } else if (command instanceof CheckSolutionCommand && ((CheckSolutionCommand)(c = (CheckSolutionCommand)command)).isGridFull() && ((CheckSolutionCommand)c).isValid()) {
             this.clock.stop();
             int i = 0;
@@ -334,6 +368,55 @@ extends MediatorExtension {
             cm.setColor(color);
             this.sendCommand(cm);
         }
+    }
+
+    private void emitClearPossibilityIfPresent(int x, int y, int number) {
+        Cell cell = this.userdata.getGrid().getCell(x, y);
+        if (!(cell instanceof PlayedCell) || !((PlayedCell) cell).getPossibility(number)) return;
+        // Solo emitir comando para celdas vacías; las con valor se actualizan solo en modelo (evita bug que borraba números)
+        if (cell.getValue() == 0) {
+            SetPossibilityCommand cmd = new SetPossibilityCommand(x + 1, y + 1);
+            cmd.setPossibility(number);
+            cmd.setActive(false);
+            cmd.setOldValue(0);
+            cmd.setNewValue(0);
+            this.handle(cmd);
+        } else {
+            ((PlayedCell) cell).setPossibility(number, false);
+        }
+    }
+
+    private CompletionFlashCommand checkAndFlashCompletion(int cx, int cy) {
+        sudoku.core.Grid g = this.userdata.getGrid();
+        CompletionFlashCommand cmd = null;
+        if (g.isRowCompleteAndCorrect(cx)) {
+            if (cmd == null) cmd = new CompletionFlashCommand();
+            for (int j = 0; j < 9; j++) cmd.addCell(cx + 1, j + 1);
+        }
+        if (g.isColCompleteAndCorrect(cy)) {
+            if (cmd == null) cmd = new CompletionFlashCommand();
+            for (int i = 0; i < 9; i++) cmd.addCell(i + 1, cy + 1);
+        }
+        int boxRow = cx / 3;
+        int boxCol = cy / 3;
+        if (g.isBoxCompleteAndCorrect(boxRow, boxCol)) {
+            if (cmd == null) cmd = new CompletionFlashCommand();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    cmd.addCell(boxRow * 3 + i + 1, boxCol * 3 + j + 1);
+                }
+            }
+        }
+        // Efecto visual al completar correctamente la grilla entera
+        if (g.check()) {
+            if (cmd == null) cmd = new CompletionFlashCommand();
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    cmd.addCell(i + 1, j + 1);
+                }
+            }
+        }
+        return cmd;
     }
 }
 

@@ -1,13 +1,13 @@
-# SudokuJ v2.0.0 - Windows (EXE)
+# SudokuJ v2.2.0 - Windows (EXE)
 
-Ejecutable para Windows. Incluye SudokuJ empaquetado.
+Ejecutable para Windows.
 
 ## Requisitos
 
 - **Windows 7 o superior**
-- **Java 11 o superior** (JRE) — el EXE requiere Java instalado en el sistema
+- **Java 11 o superior** (JRE) — el EXE requiere Java instalado
 
-> Si el EXE se creó con **jpackage**, Java viene incluido y no necesitas instalarlo.
+> Si el EXE se creó con **jpackage**, Java puede venir incluido.
 
 ## Ejecución
 
@@ -21,10 +21,10 @@ Doble clic en `SudokuJ.exe`
 
 ## Problemas
 
-Si al ejecutar aparece un error de Java:
+Si aparece error de Java:
 1. Instala Java 11+ desde [adoptium.net](https://adoptium.net/)
-2. Asegúrate de que Java está en el PATH del sistema
+2. Asegúrate de que Java está en el PATH
 
 ## Licencia y créditos
 
-GPL v2. Proyecto original: Romain Huet y Nicolas Raynaud. Actualización v2.0.0 por [Mostremos](https://github.com/Mostremos/SudokuJ).
+GPL v2. Original: Romain Huet, Nicolas Raynaud. Actualización v2.2.0 por [Mostremos](https://github.com/Mostremos/SudokuJ).

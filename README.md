@@ -1,10 +1,8 @@
-# SudokuJ v2.1.0 - Actualización y Modernización
+# SudokuJ v2.2.0 - Actualización y Modernización
 
 ![Java](https://img.shields.io/badge/Java-11%2B-orange)
 ![License](https://img.shields.io/badge/License-GPL%20v2-blue)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
-
-> ⚠️ **Versión provisoria** — En proceso de mejora. Se están corrigiendo errores de lógica y añadiendo funciones. Puede haber cambios frecuentes.
 
 ## 🎮 Descripción
 
@@ -21,7 +19,12 @@ SudokuJ es un juego de Sudoku completo y funcional, actualizado desde la versió
 - ✅ **Sin Dependencias Nativas**: Todo en Java puro
 - ✅ **Interfaz Gráfica Completa**: Swing UI moderna
 - ✅ **Múltiples Dificultades**: Fácil, Medio, Difícil
-- ✅ **Funciones Completas**: Generar, resolver, validar sudokus
+- ✅ **7 Idiomas**: Español, inglés, francés, portugués, chino, japonés, ruso
+- ✅ **Undo/Redo**: Deshacer hasta el inicio de la partida
+- ✅ **Auto-borrado de duplicados**: Al colocar un número, se eliminan ese mismo valor y sus notas en fila/columna/cuadro
+- ✅ **Efectos visuales**: Flash verde al completar fila, columna, cuadro o grilla
+- ✅ **Pistas con resaltado**: Las celdas rellenadas por pista quedan marcadas en amarillo
+- ✅ **Generar, resolver, validar**: Modo juego y modo creador de grillas
 - ✅ **Guardar/Cargar**: Persistencia de partidas
 
 ## 🚀 Inicio Rápido
@@ -34,7 +37,7 @@ SudokuJ es un juego de Sudoku completo y funcional, actualizado desde la versió
 
 #### Windows:
 ```cmd
-compile_windows.bat
+1_compile_windows.bat
 ```
 
 #### Linux/macOS:
@@ -50,7 +53,7 @@ mvn clean package
 
 ### Ejecución
 ```bash
-java -jar target/sudokuj-2.1.0.jar
+java -jar target/sudokuj-2.2.0.jar
 ```
 
 ## 📚 Documentación Completa
@@ -113,13 +116,14 @@ SuDoKuJ/
 │   ├── images/
 │   └── background/
 ├── release/                       # Archivos para distribución
-│   ├── sudokuj-2.0.0.jar         # JAR ejecutable (generado)
+│   ├── sudokuj-2.2.0.jar         # JAR ejecutable (generado)
 │   ├── SudokuJ.exe                # Ejecutable Windows (generado)
 │   └── README.md                  # README para usuarios
 ├── pom.xml                        # Configuración Maven
-├── compile_windows.bat            # Script compilación Windows
+├── 1_compile_windows.bat          # Script compilación Windows
 ├── compile_linux.sh               # Script compilación Linux/macOS
-├── crear_exe.bat                  # Script para crear .exe
+├── 2_crear_exe.bat                # Script para crear .exe
+├── 3_build_release.bat            # Script para empaquetar release
 └── README.md                      # Este archivo
 ```
 
@@ -131,7 +135,7 @@ Ver **[ESTRUCTURA_PROYECTO.md](ESTRUCTURA_PROYECTO.md)** para detalles completos
 
 **Windows:**
 ```cmd
-compile_windows.bat
+1_compile_windows.bat
 ```
 
 **Linux/macOS:**
@@ -148,7 +152,7 @@ mvn clean compile
 # Crear JAR
 mvn clean package
 
-# El JAR estará en: target/sudokuj-2.0.0.jar
+# El JAR estará en: target/sudokuj-2.2.0.jar
 ```
 
 ### Opción 3: Manual
@@ -164,14 +168,14 @@ crear_exe.bat
 
 O manualmente:
 ```cmd
-jpackage --input target --name SudokuJ --main-jar sudokuj-2.0.0.jar --main-class sudoku.Main --type exe --dest dist
+jpackage --input target --name SudokuJ --main-jar sudokuj-2.2.0.jar --main-class sudoku.Main --type exe --dest dist
 ```
 
 ### Método 2: Launch4j
 1. Descarga Launch4j: http://launch4j.sourceforge.net/
 2. Configura:
    - Output file: `SudokuJ.exe`
-   - Jar: `target\sudokuj-2.0.0.jar`
+   - Jar: `target\sudokuj-2.2.0.jar`
    - Min JRE version: `11.0`
 3. Build wrapper
 
@@ -207,13 +211,22 @@ Ver [LICENCE.txt](LICENCE.txt) para más detalles.
   - Sitio: https://code.google.com/archive/p/sudokuj07/
   - Licencia: GPL v2
   
-- **Actualización v2.1.0** (20-02-2026)
+- **Actualización v2.2.0** (19-02-2026)
   - Por: https://github.com/Mostremos/SudokuJ
+  - Undo hasta el inicio de la partida (100 pasos)
+  - Auto-borrado de duplicados y notas al colocar número (fila/columna/cuadro)
+  - Efectos visuales al completar fila, columna, cuadro o grilla entera
+  - Nuevos idiomas: portugués, chino, japonés, ruso
+  - Resaltado de celdas rellenadas por pista (marca persistente)
+  - Corrección Verificar solución / Mostrar solución
+  - Reiniciar restaura correctamente tras completar
+- **Actualización v2.1.0**
   - Recuperación, reversionado y mejoras para Java moderno
-  - Eliminación de dependencias nativas, corrección de bugs, i18n
+  - Eliminación de dependencias nativas, corrección de bugs, i18n (es/en/fr)
 
 ## 📖 Recursos Adicionales
 
+- [CHANGELOG.md](CHANGELOG.md) - Historial de versiones
 - [Guía de Compilación Completa](docs/compilacion/GUIA_COMPILACION_COMPLETA.md)
 - [Detalles de la Actualización](docs/compilacion/README_ACTUALIZACION.md)
 - [Estructura del Proyecto](ESTRUCTURA_PROYECTO.md)
@@ -229,9 +242,8 @@ Ver [LICENCE.txt](LICENCE.txt) para más detalles.
 - ✅ Corrección de bugs
 - ✅ Actualización para Java 11+
 - ✅ Documentación completa
-- ✅ Scripts de compilación
-- ⏳ Compilación y pruebas (requiere JDK instalado)
-- ⏳ Creación de ejecutables (requiere compilación exitosa)
+- ✅ Scripts de compilación (1_compile, 2_crear_exe, 3_build_release)
+- ✅ Mejoras de UX (undo ampliado, efectos visuales, pistas resaltadas, 7 idiomas)
 
 ## 💡 Contribuir
 

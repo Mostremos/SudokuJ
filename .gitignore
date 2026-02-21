@@ -33,9 +33,9 @@ release/*.exe
 !release/README.md
 !release/LICENCE.txt
 
-# Directorios de release para ZIP
-SudokuJ 2.0.0 Java/
-SudokuJ 2.0.0 Windows/
+# Directorios de release para ZIP (generados por 3_build_release.bat)
+SudokuJ 2.* Java/
+SudokuJ 2.* Windows/
 dist/
 
 # Archivos de descompilación temporal

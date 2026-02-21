@@ -11,7 +11,9 @@ import jguic.Command;
 import jguic.Mediator;
 import jguic.MediatorExtension;
 import sudoku.commands.ClearPossibilitiesCommand;
+import sudoku.commands.HintCellHighlightCommand;
 import sudoku.commands.SetPossibilityCommand;
+import sudoku.commands.CompletionFlashCommand;
 import sudoku.commands.SetValueCommand;
 import sudoku.gui.GUIGridPCell;
 
@@ -67,6 +69,12 @@ extends MediatorExtension {
             int i = c.getCellX() - (c.getCellX() - 1) / 3 * 3 - 1;
             int j = c.getCellY() - (c.getCellY() - 1) / 3 * 3 - 1;
             this.cells[i][j].receiveCommand(mediator, command);
+        } else if (command instanceof CompletionFlashCommand || command instanceof HintCellHighlightCommand) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    this.cells[i][j].receiveCommand(mediator, command);
+                }
+            }
         } else {
             super.receiveCommand(mediator, command);
         }

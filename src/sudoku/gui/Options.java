@@ -13,7 +13,7 @@ public class Options implements Serializable {
     private String backgroundImage = "";
     private boolean circles = false;  // false = números en notas, true = puntos
     private Difficulty level = Difficulty.EASY;
-    private String language = "es";   // es, en, fr
+    private String language = "es";   // es, en, fr, pt, zh, ja, ru
     private transient String file;
 
     public Options() {
@@ -67,7 +67,7 @@ public class Options implements Serializable {
     }
 
     public void setLanguage(String language) {
-        if (language != null && (language.equals("es") || language.equals("en") || language.equals("fr"))) {
+        if (language != null && java.util.Set.of("es", "en", "fr", "pt", "zh", "ja", "ru").contains(language)) {
             this.language = language;
             this.save();
         }
@@ -94,7 +94,9 @@ public class Options implements Serializable {
                     this.circles = opt.circles;
                     this.backgroundImage = opt.backgroundImage;
                     this.level = opt.level;
-                    if (opt.language != null) this.language = opt.language;
+                    if (opt.language != null && java.util.Set.of("es", "en", "fr", "pt", "zh", "ja", "ru").contains(opt.language)) {
+                        this.language = opt.language;
+                    }
                 }
             }
         } catch (Exception ignored) {}

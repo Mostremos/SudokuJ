@@ -11,6 +11,8 @@ import jguic.Command;
 import jguic.Mediator;
 import sudoku.commands.ClearPossibilitiesCommand;
 import sudoku.commands.SetPossibilityCommand;
+import sudoku.commands.CompletionFlashCommand;
+import sudoku.commands.HintCellHighlightCommand;
 import sudoku.commands.SetValueCommand;
 import sudoku.gui.GUIGrid;
 import sudoku.gui.GUIGridPRegion;
@@ -61,6 +63,18 @@ extends GUIGrid {
         } else if (command instanceof SetValueCommand) {
             SetValueCommand c = (SetValueCommand)command;
             this.regions[(c.getCellX() - 1) / 3][(c.getCellY() - 1) / 3].receiveCommand(mediator, command);
+        } else if (command instanceof CompletionFlashCommand) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    this.regions[i][j].receiveCommand(mediator, command);
+                }
+            }
+        } else if (command instanceof HintCellHighlightCommand) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    this.regions[i][j].receiveCommand(mediator, command);
+                }
+            }
         } else {
             super.receiveCommand(mediator, command);
         }

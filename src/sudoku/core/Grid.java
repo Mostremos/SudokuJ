@@ -49,27 +49,32 @@ Serializable {
 
     public void generate(Difficulty level) {
         short[] grid = Core.generate(level.ordinal());
-        int c = 0;
-        while (c < 81) {
-            short v;
-            int i = c % 9;
-            int j = c / 9;
-            this.solution[i][j] = v = grid[c];
-            this.game[i][j] = v > 0 ? new FixedCell(v) : new PlayedCell();
-            ++c;
+        for (int c = 0; c < 81; c++) {
+            int row = c / 9;
+            int col = c % 9;
+            short v = grid[c];
+            this.solution[row][col] = v;
+            this.game[row][col] = v > 0 ? new FixedCell(v) : new PlayedCell();
         }
     }
 
+    /**
+     * Restaura la grilla al estado inicial: las celdas FixedCell (pistas) se mantienen,
+     * las PlayedCell se vacían. No usa solution[][] porque solve() puede haberlo
+     * sobrescrito con la solución completa.
+     */
     public void reset() {
-        int i = 0;
-        while (i < 9) {
-            int j = 0;
-            while (j < 9) {
-                short v = this.solution[i][j];
-                this.game[i][j] = v > 0 ? new FixedCell(v) : new PlayedCell();
-                ++j;
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                Cell cell = this.game[row][col];
+                if (cell instanceof PlayedCell) {
+                    cell.setValue(0);
+                    PlayedCell pc = (PlayedCell) cell;
+                    for (int n = 1; n <= 9; n++) {
+                        pc.setPossibility(n, false);
+                    }
+                }
             }
-            ++i;
         }
     }
 
@@ -134,7 +139,42 @@ Serializable {
     }
 
     /**
-     * Borra la posibilidad del número dado en todas las celdas de la misma fila,
+     * Borra el valor duplicado en otras celdas: cuando se coloca un número,
+     * se eliminan ese mismo número de las celdas jugables en la misma fila, columna y cuadro.
+     * Retorna la lista de celdas borradas como {x, y} para que la UI emita comandos.
+     */
+    public java.util.List<int[]> clearDuplicateValuesInPeers(int x, int y, int number) {
+        java.util.List<int[]> cleared = new java.util.ArrayList<>();
+        if (number < 1 || number > 9) return cleared;
+        for (int j = 0; j < 9; j++) {
+            if (j != y && clearValueIfEquals(x, j, number)) cleared.add(new int[]{x, j});
+        }
+        for (int i = 0; i < 9; i++) {
+            if (i != x && clearValueIfEquals(i, y, number)) cleared.add(new int[]{i, y});
+        }
+        int boxRow = (x / 3) * 3;
+        int boxCol = (y / 3) * 3;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int rx = boxRow + i;
+                int ry = boxCol + j;
+                if ((rx != x || ry != y) && clearValueIfEquals(rx, ry, number)) cleared.add(new int[]{rx, ry});
+            }
+        }
+        return cleared;
+    }
+
+    private boolean clearValueIfEquals(int x, int y, int number) {
+        Cell cell = this.game[x][y];
+        if (cell instanceof PlayedCell && cell.getValue() == number) {
+            cell.setValue(0);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Borra la posibilidad (nota) del número dado en todas las celdas de la misma fila,
      * columna y cuadro 3x3 (excepto la celda en x,y).
      */
     public void clearPossibilityInPeers(int x, int y, int number) {
@@ -172,6 +212,29 @@ Serializable {
             return s;
         }
         return 0;
+    }
+
+    public boolean isRowCompleteAndCorrect(int row) {
+        for (int j = 0; j < 9; j++) {
+            if (!checkCell(row, j)) return false;
+        }
+        return true;
+    }
+
+    public boolean isColCompleteAndCorrect(int col) {
+        for (int i = 0; i < 9; i++) {
+            if (!checkCell(i, col)) return false;
+        }
+        return true;
+    }
+
+    public boolean isBoxCompleteAndCorrect(int boxRow, int boxCol) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!checkCell(boxRow * 3 + i, boxCol * 3 + j)) return false;
+            }
+        }
+        return true;
     }
 
     public boolean checkCell(int x, int y) {

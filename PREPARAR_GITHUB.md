@@ -12,9 +12,10 @@
 
 ### 2. Archivos Importantes
 - [x] `README.md` - Documentación principal
+- [x] `CHANGELOG.md` - Historial de versiones
 - [x] `ESTRUCTURA_PROYECTO.md` - Explicación de estructura
 - [x] `pom.xml` - Configuración Maven
-- [x] Scripts de compilación
+- [x] Scripts de compilación (1_compile_windows.bat, 2_crear_exe.bat, 3_build_release.bat)
 
 ### 3. Verificar .gitignore
 - [x] `target/` excluido
@@ -24,110 +25,90 @@
 
 ## 🚀 Pasos para Subir a GitHub
 
-### 1. Inicializar Repositorio Git
+### 1. Inicializar Repositorio Git (si es nuevo)
 
 ```bash
 cd D:\Proyectos\SuDoKuJ
 git init
 git add .
-git commit -m "Initial commit: SudokuJ v2.0.0 - Actualización completa"
+git commit -m "SudokuJ v2.2.0 - Release completado"
 ```
 
 ### 2. Crear Repositorio en GitHub
 
 1. Ve a https://github.com/new
-2. Nombre del repositorio: `sudokuj` (o el que prefieras)
-3. Descripción: "SudokuJ v2.0.0 - Juego de Sudoku actualizado para Java moderno"
-4. **NO** inicialices con README, .gitignore o licencia (ya los tenemos)
-5. Clic en "Create repository"
+2. Nombre: `sudokuj` (o SudokuJ)
+3. Descripción: "SudokuJ v2.2.0 - Juego de Sudoku actualizado para Java moderno"
+4. **NO** inicialices con README, .gitignore o licencia
+5. Create repository
 
 ### 3. Conectar y Subir
 
 ```bash
-# Agregar remoto (reemplaza TU-USUARIO con tu usuario de GitHub)
-git remote add origin https://github.com/TU-USUARIO/sudokuj.git
-
-# Cambiar a rama main (si es necesario)
+git remote add origin https://github.com/Mostremos/SudokuJ.git
 git branch -M main
-
-# Subir código
 git push -u origin main
 ```
 
-## 📦 Para Crear un Release
+## 📦 Para Crear un Release (v2.2.0)
 
-### 1. Compilar el Proyecto
-
-```bash
-# Windows
-compile_windows.bat
-
-# Linux/macOS
-./compile_linux.sh
-
-# O con Maven
-mvn clean package
-```
-
-### 2. Preparar Release
+### 1. Compilar
 
 ```bash
-# Windows
-preparar_release.bat
+1_compile_windows.bat
+2_crear_exe.bat    # opcional, para EXE Windows
 ```
 
-Esto copiará:
-- `target/sudokuj-2.0.0.jar` → `release/sudokuj-2.0.0.jar`
-- `dist/SudokuJ.exe` → `release/SudokuJ.exe` (si existe)
-
-### 3. Crear ZIP de Release
+### 2. Empaquetar release
 
 ```bash
-# Navegar a release/
-cd release
-
-# Crear ZIP (Windows)
-# Seleccionar todos los archivos y crear ZIP
-# Nombre: SudokuJ-v2.0.0-release.zip
+3_build_release.bat
 ```
+
+Genera:
+- Carpeta `SudokuJ 2.2.0 Java` (JAR + LICENCE + README)
+- Carpeta `SudokuJ 2.2.0 Windows` (EXE + archivos, si existe)
+
+### 3. Crear ZIPs
+
+- Comprimir `SudokuJ 2.2.0 Java` → `SudokuJ-2.2.0-Java.zip`
+- Comprimir `SudokuJ 2.2.0 Windows` → `SudokuJ-2.2.0-Windows.zip`
 
 ### 4. Subir Release a GitHub
 
-1. Ve a tu repositorio en GitHub
-2. Clic en "Releases" → "Create a new release"
-3. Tag: `v2.0.0`
-4. Título: `SudokuJ v2.0.0`
-5. Descripción:
+1. Repositorio → Releases → "Draft a new release"
+2. Tag: `v2.2.0`
+3. Título: `SudokuJ v2.2.0`
+4. Descripción:
    ```markdown
-   ## SudokuJ v2.0.0
+   ## SudokuJ v2.2.0
    
-   Actualización completa del juego SudokuJ original (v1.0.1) para Java moderno.
+   Actualización del juego SudokuJ (original v1.0.1) para Java 11+.
    
-   ### Cambios Principales
-   - ✅ Compatible con Java 11+
-   - ✅ Multiplataforma (Windows, Linux, macOS)
-   - ✅ Sin dependencias nativas
-   - ✅ Bugs corregidos
-   - ✅ Mejoras de compatibilidad
+   ### Novedades v2.2.0
+   - 7 idiomas (es, en, fr, pt, zh, ja, ru)
+   - Undo/Redo hasta el inicio de la partida
+   - Auto-borrado de duplicados y notas
+   - Efectos visuales al completar fila/columna/cuadro/grilla
+   - Pistas con resaltado persistente
+   - Correcciones de Verificar/Mostrar solución y Reiniciar
    
    ### Archivos
-   - `sudokuj-2.0.0.jar` - JAR ejecutable
-   - `SudokuJ.exe` - Ejecutable Windows (opcional)
+   - **SudokuJ-2.2.0-Java.zip** — JAR para cualquier plataforma
+   - **SudokuJ-2.2.0-Windows.zip** — Ejecutable Windows (opcional)
    
    ### Requisitos
    - Java 11 o superior
    
-   Ver [README.md](README.md) para más información.
+   Ver [CHANGELOG.md](CHANGELOG.md) para el historial completo.
    ```
-6. Subir archivo ZIP: `SudokuJ-v2.0.0-release.zip`
-7. Publicar release
+5. Subir ambos ZIP
+6. Publicar release
 
 ## 📝 Descripción del Repositorio (GitHub)
 
-Usa esta descripción para el repositorio:
-
 ```
-SudokuJ v2.0.0 - Juego de Sudoku actualizado desde la versión original 1.0.1 (discontinuada). Compatible con Java 11+, multiplataforma, sin dependencias nativas. Incluye documentación completa de compilación para Windows, Linux y macOS.
+SudokuJ v2.2.0 - Juego de Sudoku actualizado desde la v1.0.1 original. Java 11+, multiplataforma, 7 idiomas, undo ampliado, efectos visuales. GPL v2.
 ```
 
 ## 🏷️ Tags Recomendados
@@ -139,7 +120,6 @@ SudokuJ v2.0.0 - Juego de Sudoku actualizado desde la versión original 1.0.1 (d
 - `desktop-application`
 - `gpl-2.0`
 - `multiplatform`
-- `legacy-update`
 
 ## 📋 README para GitHub
 

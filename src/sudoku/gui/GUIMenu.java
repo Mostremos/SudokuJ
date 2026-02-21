@@ -78,6 +78,15 @@ extends MediatorExtension {
     private static Image swing_var_helpImage = new ImageIcon("images/help.png").getImage();
     private static Image swing_var_aboutImage = new ImageIcon("images/about.png").getImage();
 
+    /** Fuente que soporta CJK (chino/japonés) y cirílico cuando el idioma lo requiere */
+    private static Font createLocaleFont(int style, int size) {
+        String lang = I18n.getLanguage();
+        if ("zh".equals(lang) || "ja".equals(lang) || "ru".equals(lang)) {
+            return new Font(Font.SANS_SERIF, style, size);
+        }
+        return new Font("Tahoma", style, size);
+    }
+
     public GUIMenu(Mediator parent) {
         super(parent);
         this.constructFileMenu();
@@ -230,6 +239,9 @@ extends MediatorExtension {
         });
         actions.add(this.swing_checkSolution);
         actions.add(new JToolBar.Separator());
+        JMenuItem creatorLabel = new JMenuItem(I18n.get("menu.creator_tools"));
+        creatorLabel.setEnabled(false);
+        actions.add(creatorLabel);
         this.swing_findSolution = new JMenuItem(I18n.get("menu.find_solution"));
         this.swing_findSolution.setAccelerator(KeyStroke.getKeyStroke(117, 0));
         this.swing_findSolution.addActionListener(new ActionListener(){
@@ -319,9 +331,21 @@ extends MediatorExtension {
         langEs.addActionListener(e -> GUIMenu.this.handle(new SetLanguageCommand("es")));
         JMenuItem langFr = new JMenuItem(I18n.get("menu.lang_french"));
         langFr.addActionListener(e -> GUIMenu.this.handle(new SetLanguageCommand("fr")));
+        JMenuItem langPt = new JMenuItem(I18n.get("menu.lang_portuguese"));
+        langPt.addActionListener(e -> GUIMenu.this.handle(new SetLanguageCommand("pt")));
+        JMenuItem langZh = new JMenuItem(I18n.get("menu.lang_chinese"));
+        langZh.addActionListener(e -> GUIMenu.this.handle(new SetLanguageCommand("zh")));
+        JMenuItem langJa = new JMenuItem(I18n.get("menu.lang_japanese"));
+        langJa.addActionListener(e -> GUIMenu.this.handle(new SetLanguageCommand("ja")));
+        JMenuItem langRu = new JMenuItem(I18n.get("menu.lang_russian"));
+        langRu.addActionListener(e -> GUIMenu.this.handle(new SetLanguageCommand("ru")));
         langMenu.add(langEn);
         langMenu.add(langEs);
         langMenu.add(langFr);
+        langMenu.add(langPt);
+        langMenu.add(langZh);
+        langMenu.add(langJa);
+        langMenu.add(langRu);
         options.add(langMenu);
         options.add(new JToolBar.Separator());
         JMenuItem swing_backgroundImage = new JMenuItem(I18n.get("menu.background"));
@@ -449,7 +473,7 @@ extends MediatorExtension {
             this.swing_helpPanel.setSize(500, 400);
             this.swing_helpPanel.setBackground(Color.WHITE);
             JTextArea rules = new JTextArea(I18n.get("help.rules"), 14, 42);
-            rules.setFont(new Font("Tahoma", 0, 11));
+            rules.setFont(createLocaleFont(0, 11));
             rules.setOpaque(true);
             rules.setBackground(Color.WHITE);
             rules.setWrapStyleWord(true);
@@ -482,7 +506,7 @@ extends MediatorExtension {
             this.swing_aboutFrame.setLocation((int)(screen.getWidth() - (double)this.swing_aboutFrame.getWidth()) / 2, (int)(screen.getHeight() - (double)this.swing_aboutFrame.getHeight()) / 2);
             JTextArea about = new JTextArea(I18n.get("about.text"), 6, 40);
             about.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
-            about.setFont(new Font("Tahoma", 0, 11));
+            about.setFont(createLocaleFont(0, 11));
             about.setOpaque(true);
             about.setBackground(Color.WHITE);
             about.setWrapStyleWord(true);
